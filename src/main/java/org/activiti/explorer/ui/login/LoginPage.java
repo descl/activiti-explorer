@@ -37,7 +37,7 @@ public class LoginPage extends CustomLayout {
   
   private static final long serialVersionUID = 1L;
   
-  protected IdentityService identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+  protected IdentityService identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
   
   protected I18nManager i18nManager;
   protected ViewManager viewManager;

@@ -51,7 +51,7 @@ public class TaskNavigator implements Navigator {
   
   public TaskNavigator() {
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     this.historyService = ProcessEngines.getDefaultProcessEngine().getHistoryService();
   }
   

@@ -34,7 +34,7 @@ public class UserListQuery extends AbstractLazyLoadingQuery {
   protected IdentityService identityService;
   
   public UserListQuery() {
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
   }
 
   public int size() {

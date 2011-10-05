@@ -52,7 +52,7 @@ public class NewGroupPopupWindow extends PopupWindow {
   protected Form form;
   
   public NewGroupPopupWindow() {
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     
     setCaption(i18nManager.getMessage(Messages.GROUP_CREATE));

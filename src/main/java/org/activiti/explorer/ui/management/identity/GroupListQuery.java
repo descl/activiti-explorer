@@ -33,7 +33,7 @@ public class GroupListQuery extends AbstractLazyLoadingQuery {
   protected IdentityService identityService;
   
   public GroupListQuery() {
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
   }
 
   public int size() {

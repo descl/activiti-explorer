@@ -70,7 +70,7 @@ public class TaskEventsPanel extends Panel {
 
   public TaskEventsPanel() {
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.taskEventTextResolver = new TaskEventTextResolver();

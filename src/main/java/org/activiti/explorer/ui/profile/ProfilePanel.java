@@ -97,7 +97,7 @@ public class ProfilePanel extends Panel {
   public ProfilePanel(String userId) {
     this.userId = userId;
     this.isCurrentLoggedInUser = userId.equals(ExplorerApp.get().getLoggedInUser().getId());
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.viewManager = ExplorerApp.get().getViewManager();
     

@@ -36,8 +36,8 @@ public class UserFormType extends AbstractFormType {
     // Check if user exists
     if(propertyValue != null) {
       // TODO: perhaps better wiring mechanism for service
-      long count = ProcessEngines.getDefaultProcessEngine()
-      .getIdentityService()
+      long count = hssc.activiti.identity.IdentityServiceImpl
+      .getInstance()
       .createUserQuery()
       .userId(propertyValue).count();
       

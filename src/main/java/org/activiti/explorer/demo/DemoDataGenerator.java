@@ -37,7 +37,7 @@ public class DemoDataGenerator {
   
   public void setProcessEngine(ProcessEngine processEngine) {
     this.processEngine = processEngine;
-    this.identityService = processEngine.getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     
     initDemoGroups();
     initDemoUsers();

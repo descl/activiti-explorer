@@ -76,7 +76,7 @@ public class GroupDetailPanel extends DetailPanel implements MemberShipChangeLis
   
   public GroupDetailPanel(GroupPage groupPage, String groupId) {
     this.groupPage = groupPage;
-    this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
     this.group = identityService.createGroupQuery().groupId(groupId).singleResult();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     
