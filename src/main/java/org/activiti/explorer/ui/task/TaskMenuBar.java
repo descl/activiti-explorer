@@ -59,7 +59,7 @@ public class TaskMenuBar extends ToolBar {
   protected I18nManager i18nManager;
   
   public TaskMenuBar() {
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     

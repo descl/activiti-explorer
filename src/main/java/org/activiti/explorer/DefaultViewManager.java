@@ -66,7 +66,7 @@ public class DefaultViewManager implements ViewManager {
   public DefaultViewManager() {
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
     this.historyService = ProcessEngines.getDefaultProcessEngine().getHistoryService();
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
   }
   
   public void showLoginPage() {

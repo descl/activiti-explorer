@@ -91,7 +91,7 @@ public class ProcessInstanceDetailPanel extends DetailPanel {
     this.processInstance = getProcessInstance(processInstanceId);
     this.processDefinition = getProcessDefinition(processInstance.getProcessDefinitionId());
     this.historicProcessInstance = getHistoricProcessInstance(processInstanceId);
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl/getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
 
     init();
   }

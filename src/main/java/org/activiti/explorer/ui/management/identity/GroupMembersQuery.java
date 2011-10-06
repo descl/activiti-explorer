@@ -52,7 +52,7 @@ public class GroupMembersQuery extends AbstractLazyLoadingQuery {
   public GroupMembersQuery(String groupId, MemberShipChangeListener memberShipChangeListener) {
     this.groupId = groupId;
     this.memberShipChangeListener = memberShipChangeListener;
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
   }
 
   public int size() {

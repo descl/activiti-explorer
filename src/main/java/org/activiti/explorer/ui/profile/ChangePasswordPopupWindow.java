@@ -54,7 +54,7 @@ public class ChangePasswordPopupWindow extends PopupWindow {
   protected Label errorLabel;
   
   public ChangePasswordPopupWindow() {
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
     this.currentUser = ExplorerApp.get().getLoggedInUser();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     

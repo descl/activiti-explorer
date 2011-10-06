@@ -80,7 +80,7 @@ public class UserDetailPanel extends DetailPanel implements MemberShipChangeList
   public UserDetailPanel(UserPage userPage, String userId) {
     this.userPage = userPage;
     this.i18nManager = ExplorerApp.get().getI18nManager();
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
     this.user = identityService.createUserQuery().userId(userId).singleResult();
     
     init();

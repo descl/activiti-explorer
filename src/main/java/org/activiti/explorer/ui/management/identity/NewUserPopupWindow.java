@@ -52,7 +52,7 @@ public class NewUserPopupWindow extends PopupWindow {
   protected Form form;
   
   public NewUserPopupWindow() {
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     
     setCaption(i18nManager.getMessage(Messages.USER_CREATE));

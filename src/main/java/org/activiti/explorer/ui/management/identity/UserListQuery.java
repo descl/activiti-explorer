@@ -34,7 +34,7 @@ public class UserListQuery extends AbstractLazyLoadingQuery {
   protected IdentityService identityService;
   
   public UserListQuery() {
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
   }
 
   public int size() {

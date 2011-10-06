@@ -54,7 +54,7 @@ public class RemoveInvolvedPersonListener implements ClickListener {
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
-    this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+    this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
   }
   
   public void buttonClick(ClickEvent event) {

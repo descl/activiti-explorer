@@ -24,4 +24,4 @@
 (defn -createGroupQuery
   [_])
 
-(def ^:static -getInstance (constantly (new hssc.activiti.identity.IdentityServiceImpl)))
+(def get-instance (constantly (new hssc.activiti.identity.IdentityServiceImpl)))

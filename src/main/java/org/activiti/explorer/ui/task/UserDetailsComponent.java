@@ -56,7 +56,7 @@ public class UserDetailsComponent extends HorizontalLayout {
     
     public UserDetailsComponent(String userId, String role) {
       this.role = role;
-      this.identityService = hssc.activiti.identity.IdentityServiceImpl.getInstance();
+      this.identityService = hssc.activiti.identity.ClojureBridge.getIdentityService();
       this.viewManager = ExplorerApp.get().getViewManager();
       
       if (userId != null) {
