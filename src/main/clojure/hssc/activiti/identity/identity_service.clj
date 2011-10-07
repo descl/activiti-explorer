@@ -21,7 +21,35 @@
   (listPage [_ first-result max-results])
   (singleResult [_]))
 
-(defn -createGroupQuery
-  [_])
+(defmacro defsn
+  [& names]
+  (cons 'do
+        (for [name names]
+          `(defn ~(symbol (str "-" name)) [& args#]
+            (throw (new Exception "That felt good."))))))
+
+(defsn
+ checkPassword
+ createGroupQuery
+ createMembership
+ createUserQuery
+ deleteGroup
+ deleteMembership
+ deleteUser
+ deleteUserAccount
+ deleteUserInfo
+ getUserAccount
+ getUserAccountNames
+ getUserInfo
+ getUserInfoKeys
+ getUserPicture
+ newGroup
+ newUser
+ saveGroup
+ saveUser
+ setAuthenticatedUserId
+ setUserAccount
+ setUserInfo
+ setUserPicture)
 
 (def get-instance (constantly (new hssc.activiti.identity.IdentityServiceImpl)))
