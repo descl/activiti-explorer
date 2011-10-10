@@ -1,6 +1,7 @@
 (ns hssc.activiti.identity.identity-service
   (:use [hssc.util :only [def-bean-maker]])
-  (:require [clojure.java.io :as jio])
+  (:require [clojure.java.io :as jio]
+            [clojure.string :as s])
   (:import org.activiti.engine.ActivitiException
            (org.activiti.engine.identity
             GroupQuery
@@ -35,6 +36,7 @@
      :last-name "the Great"
      :id "gonzo"
      :groups ["manager" "management" "accountancy" "sales"]}))
+(defn user-by-id [id] (first (filter #(= id (:id %)) user-fixtures)))
 
 
 (def-bean-maker make-user
@@ -42,14 +44,18 @@
   email first-name id last-name password)
 
 (def-bean-maker make-group
-  Group)
+  Group
+  id name type)
 
 ; Cannot use defrecord for either of these as they have to implement
 ; their own count function
+(declare add-group-filter)
 (deftype GroupQueryImpl [info]
   GroupQuery
-  (groupId [_ group-id] _)
-  (groupMember [_ group-member-user-id] _)
+  (groupId [self group-id]
+    (add-group-filter self #(= % group-id)))
+  (groupMember [self group-member-user-id]
+    (add-group-filter self (set (:groups (user-by-id group-member-user-id)))))
   (groupName [_ group-name] _)
   (groupNameLike [_ group-name-like] _)
   (groupType [_ group-type] _)
@@ -57,11 +63,29 @@
   (orderByGroupName [_] _)
   (orderByGroupType [_] _)
   (asc [_] _)
-  (count [_] 0)
+  (count [self] (clojure.core/count (.list self)))
   (desc [_] _)
-  (list [_] [])
-  (listPage [_ first-result max-results] [])
-  (singleResult [_] (throw (new Exception "GROUP CRAP"))))
+  (list [_]
+    (for [group-name (distinct (mapcat :groups user-fixtures)),
+          :when (every? #(% group-name) (:filters info))]
+      (make-group {:id group-name, :name (s/capitalize group-name)})))
+  (listPage [self first-result max-results]
+    (->>
+      self
+      .list
+      (drop first-result)
+      (take max-results)))
+  (singleResult [self]
+    (let [res (.list self)]
+      (cond
+        (= 1 (count res))
+          (first res)
+        (< 1 (count res))
+          (throw (new ActivitiException "singleResult called on groupQuery with more than one result!"))))))
+
+(defn- add-group-filter
+  [group-query f]
+  (new GroupQueryImpl (update-in (.info group-query) [:filters] conj f)))
 
 (declare add-filter)
 (deftype UserQueryImpl [info]
@@ -119,9 +143,9 @@
 
 (defsn
  checkPassword
- createGroupQuery
+;createGroupQuery
  createMembership
- createUserQuery
+;createUserQuery
  deleteGroup
  deleteMembership
  deleteUser
@@ -129,9 +153,9 @@
  deleteUserInfo
  getUserAccount
  getUserAccountNames
- getUserInfo
+;getUserInfo
  getUserInfoKeys
- getUserPicture
+;getUserPicture
  newGroup
  newUser
  saveGroup
@@ -143,11 +167,7 @@
 
 (defn -getUserInfo
   [_ user-id info-key]
-  (->
-    user-fixtures
-    (->> (filter #(= user-id (:id %))))
-    first
-    (get-in [:info info-key])))
+  (get-in (user-by-id user-id) [:info info-key]))
 
 (defn resource-bytes
   "Returns a byte-array."
