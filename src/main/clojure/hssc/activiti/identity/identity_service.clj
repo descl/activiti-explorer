@@ -1,7 +1,8 @@
 (ns hssc.activiti.identity.identity-service
   (:use [hssc.util :only [def-bean-maker]])
   (:require [clojure.java.io :as jio])
-  (:import (org.activiti.engine.identity
+  (:import org.activiti.engine.ActivitiException
+           (org.activiti.engine.identity
             GroupQuery
             UserQuery
             User
@@ -95,7 +96,13 @@
       .list
       (drop first-result)
       (take max-results)))
-  (singleResult [_] (throw (new Exception "USER CRAP"))))
+  (singleResult [self]
+    (let [res (.list self)]
+      (cond
+        (= 1 (count res))
+          (first res)
+        (< 1 (count res))
+          (throw (new ActivitiException "singleResult called on userQuery with more than one result!"))))))
 
 (defn- add-filter
   [user-query f]
@@ -108,7 +115,7 @@
   (cons 'do
         (for [name names]
           `(defn ~(symbol (str "-" name)) [& args#]
-            (throw (new Exception (str "Stub method called: IdentityService#" '~name)))))))
+            (throw (new Exception (str "Stub method called: IdentityService#" '~name (pr-str args#))))))))
 
 (defsn
  checkPassword
@@ -133,6 +140,14 @@
  setUserAccount
  setUserInfo
  setUserPicture)
+
+(defn -getUserInfo
+  [_ user-id info-key]
+  (->
+    user-fixtures
+    (->> (filter #(= user-id (:id %))))
+    first
+    (get-in [:info info-key])))
 
 (defn resource-bytes
   "Returns a byte-array."
