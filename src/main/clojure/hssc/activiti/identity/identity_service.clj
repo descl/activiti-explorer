@@ -11,8 +11,7 @@
             Picture))
   (:gen-class
     :name hssc.activiti.identity.IdentityServiceImpl
-    :implements [org.activiti.engine.IdentityService]
-    :methods [[getInstance [] org.activiti.engine.IdentityService]]))
+    :implements [org.activiti.engine.IdentityService]))
 
 (def user-fixtures
   (list
