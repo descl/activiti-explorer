@@ -12,8 +12,39 @@
     :implements [org.activiti.engine.IdentityService]
     :methods [[getInstance [] org.activiti.engine.IdentityService]]))
 
+(def user-fixtures
+  (list
+    {:first-name "Gary"
+     :last-name "Fredericks"
+     :id "gaf26"}
+    {:first-name "Kermit"
+     :last-name "the Frog"
+     :id "kermit"
+     :groups ["admin"
+              "manager"
+              "management"
+              "accountancy"
+              "engineering"
+              "sales"]}
+    {:first-name "Fozzie"
+     :last-name "Bear"
+     :id "fozzie"
+     :groups ["user" "accountancy"]}
+    {:first-name "Gonzo"
+     :last-name "the Great"
+     :id "gonzo"
+     :groups ["manager" "management" "accountancy" "sales"]}))
 
 
+(def-bean-maker make-user
+  User
+  email first-name id last-name password)
+
+(def-bean-maker make-group
+  Group)
+
+; Cannot use defrecord for either of these as they have to implement
+; their own count function
 (deftype GroupQueryImpl [info]
   GroupQuery
   (groupId [_ group-id] _)
@@ -29,35 +60,46 @@
   (desc [_] _)
   (list [_] [])
   (listPage [_ first-result max-results] [])
-  (singleResult [_]))
+  (singleResult [_] (throw (new Exception "GROUP CRAP"))))
 
+(declare add-filter)
 (deftype UserQueryImpl [info]
   UserQuery
-  (memberOfGroup [_ group-id] _)
+  (memberOfGroup [_ group-id]
+    (new UserQueryImpl
+         (update-in info :filters conj #(some #{group-id} (:groups %)))))
   (orderByUserEmail [_] _)
   (orderByUserFirstName [_] _)
   (orderByUserId [_] _)
   (orderByUserLastName [_] _)
-  (userEmail [_ email] _)
+  (userEmail [self email]
+    (add-filter self #(= email (:email %))))
   (userEmailLike [_ email-like] _)
-  (userFirstName [_ first-name] _)
+  (userFirstName [self first-name]
+    (add-filter self #(= first-name (:first-name %))))
   (userFirstNameLike [_ first-name-like] _)
-  (userId [_ user-id] _)
-  (userLastName [_ last-name] _)
+  (userId [self user-id]
+    (add-filter self #(= user-id (:id %))))
+  (userLastName [self last-name]
+    (add-filter self #(= last-name (:last-name %))))
   (userLastNameLike [_ last-name-like] _)
   (asc [_] _)
-  (count [_] 0)
+  (count [self] (clojure.core/count (.list self)))
   (desc [_] _)
-  (list [_] [])
-  (listPage [_ first-result max-results] [])
-  (singleResult [_]))
+  (list [_]
+    (let [{:keys [id]} info]
+      (map make-user
+        (reduce #(filter %2 %1) user-fixtures (:filters info)))))
+  (listPage [self first-result max-results]
+    (->> self
+      .list
+      (drop first-result)
+      (take max-results)))
+  (singleResult [_] (throw (new Exception "USER CRAP"))))
 
-(def-bean-maker make-user
-  User
-  email first-name id last-name password)
-
-(def-bean-maker make-group
-  Group)
+(defn- add-filter
+  [user-query f]
+  (new UserQueryImpl (update-in (.info user-query) [:filters] conj f)))
 
 ; Temporary implementations of the IdentityService methods that
 ; gives good error information.
