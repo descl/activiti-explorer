@@ -17,6 +17,8 @@
   (getLastName  [_] last-name)
   (getFullName  [_] full-name)
   (getPassword  [_])
+  ; I think we're fine to leave these hardcoded, as I don't think
+  ; we need admin users, especially in the sense of managing the users/groups
   (isAdmin      [_] false)
   (isUser       [_] true))
 

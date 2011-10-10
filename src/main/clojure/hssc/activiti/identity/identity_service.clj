@@ -13,6 +13,16 @@
     :name hssc.activiti.identity.IdentityServiceImpl
     :implements [org.activiti.engine.IdentityService]))
 
+(def group-fixtures
+  (list
+    {:id "admin", :name "System administrator", :type "security-role"}
+    {:id "user", :name "User", :type "security-role"}
+    {:id "manager", :name "Manager", :type "security-role"}
+    {:id "management", :name "Management", :type "assignment"}
+    {:id "accountancy", :name "Accountancy", :type "assignment"}
+    {:id "engineering", :name "Engineering", :type "assignment"}
+    {:id "sales", :name "Sales", :type "assignment"}))
+(defn group-by-id [id] (first (filter #(= id (:id %)) group-fixtures)))
 (def user-fixtures
   (list
     {:first-name "Gary"
@@ -52,22 +62,34 @@
 (deftype GroupQueryImpl [info]
   GroupQuery
   (groupId [self group-id]
-    (add-group-filter self #(= % group-id)))
+    (add-group-filter self #(= (:id %) group-id)))
   (groupMember [self group-member-user-id]
-    (add-group-filter self (set (:groups (user-by-id group-member-user-id)))))
-  (groupName [_ group-name] _)
-  (groupNameLike [_ group-name-like] _)
-  (groupType [_ group-type] _)
-  (orderByGroupId [_] _)
-  (orderByGroupName [_] _)
-  (orderByGroupType [_] _)
-  (asc [_] _)
+    (add-group-filter self (comp
+                             (set (:groups (user-by-id group-member-user-id)))
+                             :id)))
+  (groupName [self group-name]
+    (add-group-filter self #(= group-name (:name %))))
+  ;(groupNameLike [_ group-name-like] _)
+  (groupType [self group-type]
+    (add-group-filter self #(= group-type (:type %))))
+  (orderByGroupId [_]
+    (new GroupQueryImpl (assoc info :order :id :post identity)))
+  (orderByGroupName [_]
+    (new GroupQueryImpl (assoc info :order :name :post identity)))
+  (orderByGroupType [_]
+    (new GroupQueryImpl (assoc info :order :type :post identity)))
+  (asc [self]
+    (new GroupQueryImpl (assoc info :post identity)))
   (count [self] (clojure.core/count (.list self)))
-  (desc [_] _)
+  (desc [_]
+    (new GroupQueryImpl (assoc info :post reverse)))
   (list [_]
-    (for [group-name (distinct (mapcat :groups user-fixtures)),
-          :when (every? #(% group-name) (:filters info))]
-      (make-group {:id group-name, :name (s/capitalize group-name)})))
+    (->>
+      group-fixtures
+      (filter (fn [group-map] (every? #(% group-map) (:filters info))))
+      ((if-let [sort-by-fn (:order info)] (partial sort-by sort-by-fn) identity))
+      ((or (:post info) identity))
+      (map make-group)))
   (listPage [self first-result max-results]
     (->>
       self
@@ -92,28 +114,35 @@
   (memberOfGroup [_ group-id]
     (new UserQueryImpl
          (update-in info :filters conj #(some #{group-id} (:groups %)))))
-  (orderByUserEmail [_] _)
-  (orderByUserFirstName [_] _)
-  (orderByUserId [_] _)
-  (orderByUserLastName [_] _)
+  (orderByUserEmail [_]
+    (new UserQueryImpl (assoc info :order :email :post identity)))
+  (orderByUserFirstName [_]
+    (new UserQueryImpl (assoc info :order :first-name :post identity)))
+  (orderByUserId [_]
+    (new UserQueryImpl (assoc info :order :id :post identity)))
+  (orderByUserLastName [_]
+    (new UserQueryImpl (assoc info :order :last-name :post identity)))
   (userEmail [self email]
     (add-filter self #(= email (:email %))))
-  (userEmailLike [_ email-like] _)
+  ;(userEmailLike [_ email-like] _)
   (userFirstName [self first-name]
     (add-filter self #(= first-name (:first-name %))))
-  (userFirstNameLike [_ first-name-like] _)
+  ;(userFirstNameLike [_ first-name-like] _)
   (userId [self user-id]
     (add-filter self #(= user-id (:id %))))
   (userLastName [self last-name]
     (add-filter self #(= last-name (:last-name %))))
-  (userLastNameLike [_ last-name-like] _)
-  (asc [_] _)
+  ;(userLastNameLike [_ last-name-like] _)
+  (asc [_] (new UserQueryImpl (assoc :info :post identity)))
   (count [self] (clojure.core/count (.list self)))
-  (desc [_] _)
+  (desc [_] (new UserQueryImpl (assoc :info :post reverse)))
   (list [_]
-    (let [{:keys [id]} info]
-      (map make-user
-        (reduce #(filter %2 %1) user-fixtures (:filters info)))))
+    (->>
+      user-fixtures
+      (filter (fn [user-map] (every? #(% user-map) (:filters info))))
+      ((if-let [sort-by-fn (:order info)] (partial sort-by sort-by-fn) identity))
+      ((or (:post info) identity))
+      (map make-user)))
   (listPage [self first-result max-results]
     (->> self
       .list
