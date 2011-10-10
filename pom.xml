@@ -220,6 +220,10 @@
       <id>buzzmedia</id>
       <url>http://maven.thebuzzmedia.com</url> <!-- ImageScalr -->
     </repository>
+    <repository>
+      <id>activiti</id>
+      <url>http://maven.alfresco.com/nexus/content/repositories/activiti/</url>
+    </repository>
   </repositories>
 
 </project>
