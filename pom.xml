@@ -126,6 +126,13 @@
   </build>
 
   <dependencies>
+    <!-- OBIS Stuff -->
+    <dependency>
+      <groupId>obis</groupId>
+      <artifactId>obis-shared</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    <!-- Clojure Stuff -->
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
@@ -141,6 +148,7 @@
       <artifactId>jline</artifactId>
       <version>0.9.94</version>
     </dependency>
+
     <!-- Activiti -->
     <dependency>
       <groupId>org.activiti</groupId>
@@ -212,6 +220,14 @@
   </dependencies>
   
   <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>libs-release</name>
+      <url>http://obis.musc.edu/repo/libs-release</url>
+    </repository>
     <repository>
       <id>clojars.org</id>
       <url>http://clojars.org/repo</url>
