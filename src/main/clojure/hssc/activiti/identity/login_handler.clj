@@ -25,7 +25,7 @@
 
 (defn header-map
   [http-req]
-  (let [header-names (seq (.getHeaderNames http-req))]
+  (let [header-names (enumeration-seq (.getHeaderNames http-req))]
     (zipmap header-names (for [hn header-names] (.getHeader http-req hn)))))
 
 (defn -authenticate
