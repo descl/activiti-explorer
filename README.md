@@ -28,3 +28,6 @@ jdbc.password=47mFggfuG4N6P3QD
 obis.entity.host=localhost
 obis.entity.port=4567
 ```
+
+The easiest way to get this on the classpath is to place it in
+`src/main/resources/db.properties`, which is in the `.gitignore` file.
