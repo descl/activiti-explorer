@@ -7,9 +7,24 @@ is a subset of the activiti svn repository, with history starting at release
 ## Differences
 
 - Shibboleth Login
+- ObisEntity-based identity service
 
 ## Building
 
-I don't know maven, so I don't know what I'm doing,
- but right now I can get it to compile with
-`mvn clean compile clojure:compile package`.
+The project is set up so that the java needs to build first followed by the
+Clojure. So to get a war file you `mvn clean compile clojure:compile package`.
+
+It's also necessary to have a configuration file on the classpath called
+`db.properties` with config information for the activiti mysql database
+as well as the info for obis-entity. E.g., something like this:
+
+```
+db=mysql
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost/activiti
+jdbc.username=activiti
+jdbc.password=47mFggfuG4N6P3QD
+
+obis.entity.host=localhost
+obis.entity.port=4567
+```
