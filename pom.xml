@@ -130,7 +130,7 @@
     <dependency>
       <groupId>obis</groupId>
       <artifactId>obis-shared</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.2</version>
     </dependency>
     <!-- Clojure Stuff -->
     <dependency>
