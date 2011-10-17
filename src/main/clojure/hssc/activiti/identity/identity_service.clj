@@ -2,6 +2,9 @@
   (:use [hssc.util :only [def-bean-maker]])
   (:require [clojure.java.io :as jio]
             [clojure.string :as s])
+  (:require [obis-shared.entity :as ent])
+  (:require [inflections.core :as inf])
+  (:use [fogus.unk :only [memo-ttl]])
   (:import org.activiti.engine.ActivitiException
            (org.activiti.engine.identity
             GroupQuery
@@ -13,40 +16,26 @@
     :name hssc.activiti.identity.IdentityServiceImpl
     :implements [org.activiti.engine.IdentityService]))
 
-(def group-fixtures
-  (list
-    {:id "admin", :name "System administrator", :type "security-role"}
-    {:id "user", :name "User", :type "security-role"}
-    {:id "manager", :name "Manager", :type "security-role"}
-    {:id "management", :name "Management", :type "assignment"}
-    {:id "accountancy", :name "Accountancy", :type "assignment"}
-    {:id "engineering", :name "Engineering", :type "assignment"}
-    {:id "sales", :name "Sales", :type "assignment"}))
-(defn group-by-id [id] (first (filter #(= id (:id %)) group-fixtures)))
-(def user-fixtures
-  (list
-    {:first-name "Gary"
-     :last-name "Fredericks"
-     :id "gaf26"}
-    {:first-name "Kermit"
-     :last-name "the Frog"
-     :id "kermit"
-     :groups ["admin"
-              "manager"
-              "management"
-              "accountancy"
-              "engineering"
-              "sales"]}
-    {:first-name "Fozzie"
-     :last-name "Bear"
-     :id "fozzie"
-     :groups ["user" "accountancy"]}
-    {:first-name "Gonzo"
-     :last-name "the Great"
-     :id "gonzo"
-     :groups ["manager" "management" "accountancy" "sales"]}))
-(defn user-by-id [id] (first (filter #(= id (:id %)) user-fixtures)))
+(def all-users
+  (memo-ttl
+    (fn []
+      (for [{attributes :attributes} (ent/all-identities),
+            :when (contains? attributes :activiti_groups)]
+        {:first-name (attributes :first_name),
+         :last-name (attributes :last_name),
+         :id (attributes :uid)
+         :groups (attributes :activiti_groups)}))
+    300))
 
+; Is it okay to say that a group only exists if it has members? Else we'll have to
+; store groups explicitely somewhere...
+(defn all-groups
+  []
+  (for [group-id (distinct (mapcat :groups (all-users)))]
+    {:id group-id, :name (inf/camelize group-id), :type "assignment"}))
+
+(defn user-by-id [id] (first (filter #(= id (:id %)) (all-users))))
+(defn group-by-id [id] (first (filter #(= id (:id %)) (all-groups))))
 
 (def-bean-maker make-user
   User
@@ -85,7 +74,7 @@
     (new GroupQueryImpl (assoc info :post reverse)))
   (list [_]
     (->>
-      group-fixtures
+      (all-groups)
       (filter (fn [group-map] (every? #(% group-map) (:filters info))))
       ((if-let [sort-by-fn (:order info)] (partial sort-by sort-by-fn) identity))
       ((or (:post info) identity))
@@ -138,7 +127,7 @@
   (desc [_] (new UserQueryImpl (assoc :info :post reverse)))
   (list [_]
     (->>
-      user-fixtures
+      (all-users)
       (filter (fn [user-map] (every? #(% user-map) (:filters info))))
       ((if-let [sort-by-fn (:order info)] (partial sort-by sort-by-fn) identity))
       ((or (:post info) identity))
