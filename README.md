@@ -31,3 +31,10 @@ obis.entity.port=4567
 
 The easiest way to get this on the classpath is to place it in
 `src/main/resources/db.properties`, which is in the `.gitignore` file.
+
+## TODO
+
+Should probably replace the implementation of the UserCache so that it expires
+every so often. Else it will not notice when the user database changes. It was
+written assuming that it controlled changes to users, but that's not the case
+in our deployment.
