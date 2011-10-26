@@ -26,6 +26,8 @@ import org.activiti.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hssc.activiti.identity.ClojureBridge;
+
 
 
 /**
@@ -50,12 +52,14 @@ public class TrieBasedUserCache implements UserCache {
   private static final Logger LOGGER = Logger.getLogger(TrieBasedUserCache.class.getName());
   
   protected IdentityService identityService;
-  protected RadixTree<List<User>> userTrie = new RadixTreeImpl<List<User>>();
+  // protected RadixTree<List<User>> userTrie = new RadixTreeImpl<List<User>>();
+  protected RadixTree<List<User>> userTrie = (RadixTree<List<User>>) ClojureBridge.createEmptyRadixTree();
   protected Map<String, List<String>> keyCache = new HashMap<String, List<String>>();
   protected Map<String, User> userCache = new HashMap<String, User>();
   
   public void refresh() {
-    userTrie = new RadixTreeImpl<List<User>>();
+    // userTrie = new RadixTreeImpl<List<User>>();
+    userTrie = (RadixTree<List<User>>) ClojureBridge.createEmptyRadixTree();
     loadUsers();
   }
   
@@ -63,7 +67,8 @@ public class TrieBasedUserCache implements UserCache {
     long nrOfUsers = identityService.createUserQuery().count();
     long usersAdded = 0;
     
-    userTrie = new RadixTreeImpl<List<User>>();
+    // userTrie = new RadixTreeImpl<List<User>>();
+    userTrie = (RadixTree<List<User>>) ClojureBridge.createEmptyRadixTree();
     userCache = new HashMap<String, User>();
     keyCache = new HashMap<String, List<String>>();
     
