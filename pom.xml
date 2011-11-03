@@ -161,12 +161,6 @@
   </build>
 
   <dependencies>
-    <!-- OBIS Stuff -->
-    <dependency>
-      <groupId>obis</groupId>
-      <artifactId>obis-shared</artifactId>
-      <version>0.0.5</version>
-    </dependency>
     <!-- Clojure Stuff -->
     <dependency>
       <groupId>org.clojure</groupId>
