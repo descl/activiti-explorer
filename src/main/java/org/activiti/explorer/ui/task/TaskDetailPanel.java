@@ -51,6 +51,10 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
+import org.activiti.engine.identity.GroupQuery;
+import org.activiti.engine.identity.Group;
+import hssc.activiti.identity.ClojureBridge;
+
 
 /**
  * The central panel on the task page, showing all the details of a task.
@@ -372,10 +376,36 @@ public class TaskDetailPanel extends DetailPanel {
   }
   
   protected boolean canUserClaimTask() {
-   return taskService.createTaskQuery()
-     .taskCandidateUser(ExplorerApp.get().getLoggedInUser().getId())
-     .taskId(task.getId())
-     .count() == 1; 
+    String currentUser = ExplorerApp.get().getLoggedInUser().getId();
+    /*
+     * This is the query in the original implementation, which I think
+     * can still help in the case that a user is mentioned as a candidate
+     * directly, rather than by group.
+     */
+    if(taskService.createTaskQuery()
+      .taskCandidateUser(currentUser)
+      .taskId(task.getId())
+      .count() == 1) return true;
+    GroupQuery gc = ClojureBridge.getIdentityService()
+                                 .createGroupQuery()
+                                 .groupMember(currentUser);
+    /*
+     * TODO: This is currently implemented as a sequence of queries, as
+     * that's the only type supported by 5.8. In trunk there is a
+     * TaskQuery#taskCandidateGroupIn function that will reduce this
+     * to one query, so once that's available we should update the code
+     * here.
+     *
+     * The reason we add this in is because we aren't storing users in
+     * the database, so the original query does not work.
+     */
+    for(Group group : gc.list()){
+      if(taskService.createTaskQuery()
+        .taskCandidateGroup(group.getId())
+        .taskId(task.getId())
+        .count() == 1) return true;
+    }
+    return false;
   }
   
   protected void addEmptySpace(ComponentContainer container) {
