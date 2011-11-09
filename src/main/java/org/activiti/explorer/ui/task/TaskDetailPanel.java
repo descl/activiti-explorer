@@ -175,6 +175,9 @@ public class TaskDetailPanel extends DetailPanel {
     if(!isCurrentUserAssignee() && canUserClaimTask()) {
       claimButton = new Button(i18nManager.getMessage(Messages.TASK_CLAIM));
       claimButton.addListener(new ClaimTaskClickListener(task.getId(), taskService));
+      // claimButton.setHeight(50, UNITS_PIXELS);
+      // claimButton.setWidth(120, UNITS_PIXELS);
+      claimButton.addStyleName("obis-claim-button");
       layout.addComponent(claimButton);
       layout.setComponentAlignment(claimButton, Alignment.MIDDLE_LEFT);
     }

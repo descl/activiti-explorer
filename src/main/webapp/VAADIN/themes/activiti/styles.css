@@ -953,3 +953,16 @@ div.searchbox {
 	height:588px;
 	overflow:hidden;
 }
+
+
+/*
+ * Stuff we added
+ */
+
+.obis-claim-button .v-button-wrap .v-button-caption {
+  font-size: 25px;
+}
+
+.obis-claim-button .v-button-wrap {
+  /*height: 100%;*/
+}
