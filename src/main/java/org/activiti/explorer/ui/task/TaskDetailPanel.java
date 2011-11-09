@@ -194,12 +194,14 @@ public class TaskDetailPanel extends DetailPanel {
     if (task.getDescription() != null && !"".equals(task.getDescription())) {
       descriptionText = task.getDescription();
     } else {
-      descriptionText = i18nManager.getMessage(Messages.TASK_NO_DESCRIPTION);
+      // descriptionText = i18nManager.getMessage(Messages.TASK_NO_DESCRIPTION);
+      descriptionText = "";
     }
     final Label descriptionLabel = new Label(descriptionText);
-    descriptionLabel.addStyleName(ExplorerLayout.STYLE_CLICKABLE);
+    // descriptionLabel.addStyleName(ExplorerLayout.STYLE_CLICKABLE);
     descriptionLayout.addComponent(descriptionLabel);
     
+    /*
     descriptionLayout.addListener(new LayoutClickListener() {
       public void layoutClick(LayoutClickEvent event) {
         if (event.getClickedComponent() != null && event.getClickedComponent().equals(descriptionLabel)) {
@@ -236,7 +238,7 @@ public class TaskDetailPanel extends DetailPanel {
           });
         }
       }
-    });
+    }); */
   }
 
   protected void initProcessLink() {
