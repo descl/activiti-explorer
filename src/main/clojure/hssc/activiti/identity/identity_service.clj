@@ -2,7 +2,7 @@
   (:use [hssc.util :only [def-bean-maker]])
   (:require [clojure.java.io :as jio]
             [clojure.string :as s])
-  (:require [obis-shared.entity :as ent])
+  (:require [obis-shared.entity.identity :as id])
   (:require [inflections.core :as inf])
   (:use [fogus.unk :only [memo-ttl]])
   (:import org.activiti.engine.ActivitiException
@@ -19,13 +19,13 @@
 (def all-users
   (memo-ttl
     (fn []
-      (for [{attributes :attributes} (ent/all-identities),
+      (for [attributes (id/all-identities),
             :when (contains? attributes :activiti_groups)]
         {:first-name (attributes :first_name),
          :last-name (attributes :last_name),
          :id (attributes :uid)
          :groups (attributes :activiti_groups)}))
-    300))
+    300000))
 
 ; Is it okay to say that a group only exists if it has members? Else we'll have to
 ; store groups explicitely somewhere...
