@@ -165,7 +165,7 @@
     <dependency>
       <groupId>obis</groupId>
       <artifactId>obis-shared</artifactId>
-      <version>0.0.5</version>
+      <version>0.1.0</version>
     </dependency>
     <!-- Clojure Stuff -->
     <dependency>
@@ -186,7 +186,7 @@
     <dependency>
       <groupId>unk</groupId>
       <artifactId>unk</artifactId>
-      <version>0.9.2</version>
+      <version>0.9.3</version>
     </dependency>
 
     <!-- Activiti -->
