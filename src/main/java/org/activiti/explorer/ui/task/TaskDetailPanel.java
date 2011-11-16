@@ -197,7 +197,7 @@ public class TaskDetailPanel extends DetailPanel {
       // descriptionText = i18nManager.getMessage(Messages.TASK_NO_DESCRIPTION);
       descriptionText = "";
     }
-    final Label descriptionLabel = new Label(descriptionText);
+    final Label descriptionLabel = new Label(descriptionText, Label.CONTENT_XHTML);
     // descriptionLabel.addStyleName(ExplorerLayout.STYLE_CLICKABLE);
     descriptionLayout.addComponent(descriptionLabel);
     
