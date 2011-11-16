@@ -168,6 +168,17 @@ public class TaskDetailPanel extends DetailPanel {
     centralLayout.addComponent(layout);
     
     initClaimButton(layout);
+
+    // Repeated these five lines so that we'll get the claim button
+    // above the description. Likely there is a more straightforward
+    // VAADINy way to do this.
+
+    layout = new HorizontalLayout();
+    layout.addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
+    layout.setWidth(100, UNITS_PERCENTAGE);
+    layout.setSpacing(true);
+    centralLayout.addComponent(layout);
+
     initDescription(layout);
   }
 
