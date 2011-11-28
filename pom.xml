@@ -167,6 +167,11 @@
       <artifactId>obis-shared</artifactId>
       <version>0.1.2</version>
     </dependency>
+    <dependency>
+      <groupId>obis</groupId>
+      <artifactId>obis-activiti-core</artifactId>
+      <version>0.0.1.demo-SNAPSHOT</version>
+    </dependency>
     <!-- Clojure Stuff -->
     <dependency>
       <groupId>org.clojure</groupId>
