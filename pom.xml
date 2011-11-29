@@ -204,7 +204,7 @@
       <artifactId>activiti-spring</artifactId>
       <version>5.8</version>
     </dependency>
-    
+
     <!-- Vaadin -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -215,17 +215,17 @@
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin</artifactId>
     </dependency>
-    
+
     <!-- Database -->
     <dependency>
-        <groupId>commons-dbcp</groupId>
-        <artifactId>commons-dbcp</artifactId>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
-    
+
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -235,7 +235,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
     </dependency>    
-     <dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
     </dependency>
@@ -249,21 +249,21 @@
       <artifactId>imgscalr-lib</artifactId>
       <version>3.1</version>
     </dependency>
-    
+
     <!-- Running example processes -->
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy</artifactId>
     </dependency>
-    
+
     <!-- Testing -->
-	  <dependency>
-	    <groupId>junit</groupId>
-	    <artifactId>junit</artifactId>
-	  </dependency>
-   
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
   </dependencies>
-  
+
   <repositories>
     <repository>
       <snapshots>
@@ -272,6 +272,12 @@
       <id>central</id>
       <name>libs-release</name>
       <url>http://obis.musc.edu/repo/libs-release</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>snapshots</id>
+      <name>libs-snapshot</name>
+      <url>http://obis.musc.edu/repo/libs-snapshot</url>
     </repository>
     <repository>
       <id>clojars.org</id>
