@@ -34,5 +34,5 @@
   ; are a different type we just return nil
   (when (instance? HttpServletRequest req)
     (when-let [ident (shib/headers-to-identity (header-map req))]
-      (let [{:keys [first_name last_name uid]} (:attributes ident)]
+      (let [{:keys [first_name last_name uid]} ident]
         (new ShibUser uid first_name last_name (str first_name " " last_name))))))
